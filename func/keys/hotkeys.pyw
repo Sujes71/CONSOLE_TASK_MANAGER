@@ -11,9 +11,7 @@ COMBINATIONS = [
     {keyboard.Key.shift_l, keyboard.KeyCode(char='w')},
     {keyboard.Key.shift_l, keyboard.KeyCode(char='W')},
     {keyboard.Key.shift_l, keyboard.KeyCode(char='x')},
-    {keyboard.Key.shift_l, keyboard.KeyCode(char='X')},
-    {keyboard.Key.shift_l, keyboard.KeyCode(char='p')},
-    {keyboard.Key.shift_l, keyboard.KeyCode(char='P')}
+    {keyboard.Key.shift_l, keyboard.KeyCode(char='X')}
 ]  
 
 # The currently active modifiers
@@ -26,9 +24,6 @@ def open_terminal():
     
 def open_opera():
      webbrowser.open(f'https://www.google.es')
-    
-def write():
-     kb.write('ython .\\tasker.py')
 
 def on_press(key):
     if any([key in COMBO for COMBO in COMBINATIONS]):
@@ -41,8 +36,6 @@ def on_press(key):
                 open_opera()
             elif current.__contains__(keyboard.Key.shift_l) and (current.__contains__(keyboard.KeyCode(char='x')) or current.__contains__(keyboard.KeyCode(char='X'))):
                 exit()
-            elif current.__contains__(keyboard.Key.shift_l) and (current.__contains__(keyboard.KeyCode(char='p')) or current.__contains__(keyboard.KeyCode(char='P'))):
-                write()
             current.clear()
             time.sleep(0.5)
             
