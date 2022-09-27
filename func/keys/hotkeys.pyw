@@ -24,6 +24,7 @@ def open_terminal():
     
 def open_opera():
      webbrowser.open(f'https://www.google.es')
+     time.sleep(1)
 
 def on_press(key):
     if any([key in COMBO for COMBO in COMBINATIONS]):

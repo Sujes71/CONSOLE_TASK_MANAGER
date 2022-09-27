@@ -31,7 +31,7 @@ def task_help():
                 -e/--exec = execute a program or open a website and permits you check, add or remove apps from exec db
                 -s/--shutdown = program a time to shutdown pc
                 -o/--outsign = permits the user to sign out from work metaenlace
-                -sc/--scrap = permits the user to scrapping the last eight animes and the results and classification of laliga and premier league
+                -sc/--scrap = permits the user to scrapping last animes and football result
                 """ )
     else:
         print('[!] %s ' %(error[5]))
@@ -238,7 +238,7 @@ def task_scrap():
     if len(sys.argv) == 2:
         print(f'usage: {sys.argv[0]} [{sys.argv[1]}]')
         print("optional arguments:"+"""
-            -sc,  --scrap permits the user to scrapping the last eight animes and the results and classification of laliga and premier league
+            -sc,  --scrap permits the user to scrapping last animes and football result
             """ )
     elif len(sys.argv) == 3: 
         if sys.argv[2] == '?':

@@ -110,10 +110,9 @@ def exec(query):
         webbrowser.open(f'https://www.{query}')
         print('[+] web reached succesfully')
     elif query in list:
-        for app in list:
-            if app in query:
-                os.system(f'start {select_path_byname(query)}')
-                print('[+] program opened succesfully')
+        os.system(r"start " + select_path_byname(query))
+        print('[+] program opened succesfully')
+                
     else:
         print(f'[!] error: arg1 [{query}]: expected one valid arg1' )
         print("""
