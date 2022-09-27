@@ -1,5 +1,4 @@
 import os
-from unicodedata import name
 import webbrowser
 import sqlite3
 
@@ -110,7 +109,7 @@ def exec(query):
         webbrowser.open(f'https://www.{query}')
         print('[+] web reached succesfully')
     elif query in list:
-        os.system(r"start " + select_path_byname(query))
+        os.startfile(select_path_byname(query))
         print('[+] program opened succesfully')
                 
     else:

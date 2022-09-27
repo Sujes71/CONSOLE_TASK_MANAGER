@@ -21,10 +21,11 @@ def open_terminal():
     os.system(f'start C:\\Users\\Jesus\\AppData\Local\\Microsoft\\WindowsApps\\Microsoft.WindowsTerminal_8wekyb3d8bbwe\\wt.exe')
     time.sleep(1)
     kb.write('python .\\tasker.py')
+    time.sleep(1)
     
 def open_opera():
      webbrowser.open(f'https://www.google.es')
-     time.sleep(1)
+     time.sleep(2)
 
 def on_press(key):
     if any([key in COMBO for COMBO in COMBINATIONS]):

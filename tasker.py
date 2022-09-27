@@ -10,7 +10,7 @@ from os import _exit
 arg = [ '-h', '--help', '-g', '--generator', '-a', '--alarm', '-e', '--exec', '-s', '--shutdown', '--outsign', '-o', '-sc', '--scrap']
 
 try:
-    error = ['argument not recognized', f'error: argument [{sys.argv[1]}]: expected one or two arguments', f'error: argument [{sys.argv[1]}]: expected one argument', f'error: argument [{sys.argv[1]}]: expected four arguments', f'error: argument [{sys.argv[1]}]: expected three arguments', f'error: argument [{sys.argv[1]}]: expected no arguments']
+    error = ['argument not recognized', f'error: argument [{sys.argv[1]}]: expected one or two arguments', f'error: argument [{sys.argv[1]}]: expected one argument', f'error: argument [{sys.argv[1]}]: expected four arguments', f'error: argument [{sys.argv[1]}]: expected three arguments', f'error: argument [{sys.argv[1]}]: expected no arguments', f'error: argument [{sys.argv[1]}]: expected three or four arguments']
     
 except:
     print('[!] you did not entered arguments')
@@ -211,28 +211,36 @@ def task_signout():
             elif sys.argv[4] == '?' and len(sys.argv) == 5 and sys.argv[2] != '?' and sys.argv[3] != '?':
                 print('[?] arg3 = description of task')
             elif len(sys.argv) == 5 and sys.argv[2] != '?' and sys.argv[3] != '?' and sys.argv[4] != '?':
-                signout(sys.argv[2], sys.argv[3], sys.argv[4])
+                signout(sys.argv[2], sys.argv[3], sys.argv[4], 'None')
             else:
-                print('[!] %s ' %(error[4]))
+                print('[!] %s ' %(error[6]))
                 print("""
                 arg1 = project to sign out or -l/--list to list all projects and tasks
                 arg2 = task to sign out
                 arg3 = description of task
+                arg4 = time to sign out <optional>
                 """ )
         except:
-            print('[!] %s ' %(error[4]))
+            print('[!] %s ' %(error[6]))
             print("""
             arg1 = project to sign out or -l/--list to list all projects and tasks
             arg2 = task to sign out
             arg3 = description of task
+            arg4 = time to sign out <optional>
             """ )
-    
+    elif len(sys.argv) == 6 and sys.argv[2] != '?' and sys.argv[3] != '?' and sys.argv[4] != '?':
+        if sys.argv[5] == '?':
+            print('[?] arg4 = time to sign out or default/* for default time sign out')
+        else:
+            signout(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
+
     else:
-        print('[!] %s ' %(error[4]))
+        print('[!] %s ' %(error[6]))
         print("""
         arg1 = project to sign out or -l/--list to list all projects and tasks
         arg2 = task to sign out
         arg3 = description of task
+        arg4 = time to sign out <optional>
         """ )
 def task_scrap():
     if len(sys.argv) == 2:
