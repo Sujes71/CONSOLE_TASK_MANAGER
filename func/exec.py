@@ -118,6 +118,6 @@ def exec(query):
         arg1 = name of the program or web domain, -l/--list to list all available, -a/--add to include a new one, -r/--remove to remove or -i/--init to initialize the table
         """ )
         
-def list():
+def list_apps():
     for app in select_all():
         print("%-15s %1s" % (app[0], app[1]))

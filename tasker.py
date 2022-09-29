@@ -1,7 +1,7 @@
 import sys
 from func.generator import generate, generate_only_folders
 from func.timer import ring
-from func.exec import exec, insert, list, remove, create_table
+from func.exec import exec, insert, list_apps, remove, create_table
 from func.shutdown import shutdown
 from func.out  import signout, listout
 from func.scrap import list_anime, list_league
@@ -100,7 +100,7 @@ def task_exec():
     
     elif len(sys.argv) == 3:  
         if sys.argv[2] == '--list' or sys.argv[2] == '-l':
-            list()
+            list_apps()
         elif sys.argv[2] == '--init' or sys.argv[2] == '-i':
             create_table()
         elif sys.argv[2] == '--add' or sys.argv[2] == '-a':

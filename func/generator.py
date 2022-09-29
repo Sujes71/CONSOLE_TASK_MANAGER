@@ -14,11 +14,14 @@ def createDirectory(path, foldername):
     
 
 def generate(folder, task):
-    
-    path = "C:/Users/Jesus/Documents/SMS-ME/"
+    inPath =  f"C:/Users/{os.getlogin()}/Documents/"
+    path = f"C:/Users/{os.getlogin()}/Documents/Work-index/"
     folder = "/" + folder
     task = "/" + task
-
+    
+    if not os.path.isdir(path):
+        createDirectory(inPath, "Work-index")
+        
     if os.path.isdir(path + folder):
         os.chdir(path + folder)
         
@@ -43,8 +46,12 @@ def generate(folder, task):
         createFile('conclusion.txt')
         
 def generate_only_folders(folder):
-    path = "C:/Users/Jesus/Documents/SMS-ME/"
+    inPath =  f"C:/Users/{os.getlogin()}/Documents/"
+    path = f"C:/Users/{os.getlogin()}/Documents/Work-index/"
     folder = "/" + folder
+    if not os.path.isdir(path):
+        createDirectory(inPath, "Work-index")
+        
     if os.path.isdir(path + folder):
         os.chdir(path + folder)
         
