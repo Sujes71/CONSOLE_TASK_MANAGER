@@ -62,7 +62,7 @@ def signout(project, task, description, time):
             
             if done:
                 done = False
-                if abs(int(currenttime) - 150000) < abs(int(currenttime) - 183000): 
+                if abs(int(currenttime) - 150000) < abs(int(currenttime) - 183000) and (int(currenttime) - 150000) < 0: 
                     timeset = '150000'
                 else:
                     timeset = '183000'
@@ -101,14 +101,11 @@ def signout(project, task, description, time):
         Select(driver.find_element("name", f"ctl00$MainContentPlaceHolder$RepetidorDia$ctl0{datetime.today().weekday()}$GridView_dia$ctl0{iter}$ddlTareas")).options[int(task)].click()
         driver.find_element("id", f"MainContentPlaceHolder_RepetidorDia_GridView_dia_{datetime.today().weekday()}_buttonComment_{button_iter}").click();
         driver.find_element("name", f"ctl00$MainContentPlaceHolder$RepetidorDia$ctl0{datetime.today().weekday()}$GridView_dia$ctl0{iter}$Observaciones").send_keys(description)
-        
-        if time == 'None' or time == '*' or time == 'default':
+        if iter > 2 and (datetime.today().weekday() == 0 or datetime.today().weekday() == 2):
             if abs(int(currenttime) - 150000) < abs(int(currenttime) - 183000):
-                driver.find_element("name", f"ctl00$MainContentPlaceHolder$RepetidorDia$ctl0{datetime.today().weekday()}$GridView_dia$ctl0{iter}$Inicio").send_keys('15:00:00')
+                driver.find_element("name", f"ctl00$MainContentPlaceHolder$RepetidorDia$ctl0{datetime.today().weekday()}$GridView_dia$ctl0{iter}$Inicio").send_keys('08:00:00')
             else:                            
-                driver.find_element("name", f"ctl00$MainContentPlaceHolder$RepetidorDia$ctl0{datetime.today().weekday()}$GridView_dia$ctl0{iter}$Inicio").send_keys('18:30:00')
-        else:
-            driver.find_element("name", f"ctl00$MainContentPlaceHolder$RepetidorDia$ctl0{datetime.today().weekday()}$GridView_dia$ctl0{iter}$Inicio").send_keys(time)
+                driver.find_element("name", f"ctl00$MainContentPlaceHolder$RepetidorDia$ctl0{datetime.today().weekday()}$GridView_dia$ctl0{iter}$Inicio").send_keys('15:00:00')
             
         sleep(0.5)
         driver.find_element("id", "MainContentPlaceHolder_ButtonEntrada").click()
