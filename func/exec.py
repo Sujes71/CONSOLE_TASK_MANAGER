@@ -3,16 +3,6 @@ import webbrowser
 import sqlite3
 
 database = r"C:\Users\Jesus\Documents\Scripts\console_task_manager\DB\exec.db"
-"""
-dictapp = [('cmd','Intérprete de comandos','cmd'), ('paint','Aplicación de windows para dibujar','mspaint'),
-            ('notas','Aplicación de notas','notepad++'), ('opera','Navegador opera por defecto','opera'),
-            ('vsc','Editor de código Visual studio code','code'), ('vs','Entorno de desarrollo integrado IDE Visual Studio','devenv'),
-            ('chrome','Navegador Chrome','chrome'), ('sourcetree','Simplificador de interacciones con repositorios git','C:/Users/Jesus/AppData/Local/SourceTree/sourcetree'),
-            ('discord','Servicio de mensajería instantánea para amigos','C:/Users/Jesus/Desktop/Discord'), ('slack','Aplicación de mensajería instantánea para trabajo','C:/Users/Jesus/AppData/Local/slack/slack'),
-            ('dofus','Videojuego de rol multijugador','C:/Users/Jesus/Desktop/Dofus'), ('eclipse','Entorno de desarrollo integrado IDE para java en proyectos nuevos','C:/Users/Jesus/NewOxygen/eclipse/eclipse'), 
-            ('struts','Entorno de desarrollo integrado IDE para java proyectos para struts','C:/Users/Jesus/Eclipse_SCAIDESA/eclipse'), ('intellij','Entorno de desarrollo integrado IDE para Java y Python','C:/Users/Jesus/Desktop/intellij'),
-            ('postman','Plataforma de API para enviar peticiones https','C:/Users/Jesus/AppData/Local/Postman/postman'), ('yuzu','Emulador de nintendo switch','C:/Users/Jesus/Desktop/yuzu')]
-"""
 
 def create_connection(db_file):
     conn = None

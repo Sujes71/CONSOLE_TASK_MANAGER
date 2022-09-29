@@ -122,7 +122,7 @@ def signout(project, task, description, time):
             print("[!] no alert detected")
             _exit(0)
 
-        sleep(0.5)
+        sleep(1)
         driver.find_element("id", "btnAceptar").click()
         sleep(2);
 

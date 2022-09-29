@@ -58,6 +58,7 @@ def list_league(comp):
     
     result_teams = result_soup.find_all('span', class_='nombre-equipo')
     results = result_soup.find_all('a', class_='resultado')
+    results += result_soup.find_all('span', class_='resultado');
     date = result_soup.find('span', class_='fecha-evento').text
     
     if len(results) == 0:
@@ -107,3 +108,5 @@ def list_league(comp):
     df = pd.DataFrame({'TEAM':list_teams, 'POINTS':list_points})
     df.index = df.index + 1
     print(tabulate(df, showindex=True, headers=df.columns))
+    
+list_league("laliga")
