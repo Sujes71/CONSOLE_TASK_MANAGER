@@ -108,5 +108,3 @@ def list_league(comp):
     df = pd.DataFrame({'TEAM':list_teams, 'POINTS':list_points})
     df.index = df.index + 1
     print(tabulate(df, showindex=True, headers=df.columns))
-    
-list_league("laliga")

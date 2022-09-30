@@ -84,7 +84,7 @@ def truncate():
     conn = create_connection(database) 
     cur = conn.cursor()
     
-    cur.execute("TRUNCATE TABLE APPS")
+    cur.execute("DELETE FROM APPS")
     print('[-] truncated successfully')
     
     conn.commit()
@@ -105,7 +105,7 @@ def exec(query):
     else:
         print(f'[!] error: arg1 [{query}]: expected one valid arg1' )
         print("""
-        arg1 = name of the program or web domain, -l/--list to list all available, -a/--add to include a new one, -r/--remove to remove or -i/--init to initialize the table
+        arg1 = name of the program or web domain, -l/--list to list all available, --add to include a new one, --remove to remove or --init to initialize the table, --truncate to remove all db elements
         """ )
         
 def list_apps():

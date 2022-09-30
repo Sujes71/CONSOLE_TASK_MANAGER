@@ -1,7 +1,7 @@
 import sys
 from func.generator import generate, generate_only_folders
 from func.timer import ring
-from func.exec import exec, insert, list_apps, remove, create_table
+from func.exec import exec, insert, list_apps, remove, create_table, truncate
 from func.shutdown import shutdown
 from func.out  import signout, listout
 from func.scrap import list_anime, list_league
@@ -101,9 +101,9 @@ def task_exec():
     elif len(sys.argv) == 3:  
         if sys.argv[2] == '--list' or sys.argv[2] == '-l':
             list_apps()
-        elif sys.argv[2] == '--init' or sys.argv[2] == '-i':
+        elif sys.argv[2] == '--init':
             create_table()
-        elif sys.argv[2] == '--add' or sys.argv[2] == '-a':
+        elif sys.argv[2] == '--add':
                 print('[!] %s ' %(error[4]))
                 print("""
                 arg1 = name of the program to add
@@ -115,8 +115,11 @@ def task_exec():
                 print("""
                 arg1 = name of the program to remove
                 """ )
+        elif sys.argv[2] == '--truncate':
+            truncate()
+            
         elif sys.argv[2] == '?':
-            print('[?] arg1 = name of the program or web domain, -l/--list to list all available, -a/--add to include a new one, -r/--remove to remove or -i/--init to initialize the table')
+            print('[?] arg1 = name of the program or web domain, -l/--list to list all available, --add to include a new one, --remove to remove or --init to initialize the table, --truncate to remove all db elements')
         else:
             exec(sys.argv[2])
         
@@ -162,12 +165,12 @@ def task_exec():
         else:
             print('[!] %s ' %(error[2]))
             print("""
-            arg1 = name of the program or web domain, -l/--list to list all available, -a/--add to include a new one, -r/--remove to remove or -i/--init to initialize the table'
+            arg1 = name of the program or web domain, -l/--list to list all available, --add to include a new one, --remove to remove or --init to initialize the table, --truncate to remove all db elements'
             """ )
     else:
         print('[!] %s ' %(error[2]))
         print("""
-        arg1 = name of the program or web domain, -l/--list to list all available, -a/--add to include a new one, -r/--remove to remove or -i/--init to initialize the table'
+        arg1 = name of the program or web domain, -l/--list to list all available, --add to include a new one, --remove to remove or --init to initialize the table, --truncate to remove all db elements'
         """ )
 
 def task_shutdown():
