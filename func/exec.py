@@ -2,7 +2,7 @@ import os
 import webbrowser
 import sqlite3
 
-database = r"C:\Users\Jesus\Documents\Scripts\console_task_manager\DB\exec.db"
+database = r"DB\db.db"
 
 def create_connection(db_file):
     conn = None

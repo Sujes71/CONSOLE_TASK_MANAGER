@@ -124,7 +124,7 @@ def task_exec():
             exec(sys.argv[2])
         
     elif len(sys.argv) > 3 and len(sys.argv) <= 6:
-        if sys.argv[2] == '--add' or sys.argv[2] == '-a':
+        if sys.argv[2] == '--add':
             try:
                 if len(sys.argv) == 6 and sys.argv[5] != '?' and sys.argv[4] != '?' and sys.argv[3] != '?':
                     insert(sys.argv[3], sys.argv[4], sys.argv[5])
@@ -141,7 +141,7 @@ def task_exec():
                 arg2 = description of the program to add
                 arg3 = path of the program to add
                 """ )
-        elif sys.argv[2] == '--remove' or sys.argv[2] == '-r':
+        elif sys.argv[2] == '--remove':
             if len(sys.argv) == 4 and sys.argv[3] != '?':
                 remove(sys.argv[3])
             elif sys.argv[3] == '?':
@@ -157,7 +157,7 @@ def task_exec():
             expected no arguments
             """ )
             
-        elif sys.argv[2] == '--init' or sys.argv[2] == '-i':
+        elif sys.argv[2] == '--init':
             print('[!] %s ' %(f'error: argument [{sys.argv[1]} {sys.argv[2]}]: expected no arguments'))
             print("""
             expected no arguments
