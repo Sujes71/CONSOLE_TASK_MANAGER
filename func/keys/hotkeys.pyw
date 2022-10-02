@@ -24,7 +24,7 @@ def open_terminal():
     time.sleep(1)
     
 def open_opera():
-     webbrowser.open(f'https://www.google.es')
+     webbrowser.open(f'https://you.com/code')
      time.sleep(2)
 
 def on_press(key):
