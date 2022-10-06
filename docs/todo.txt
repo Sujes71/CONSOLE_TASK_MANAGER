@@ -1,0 +1,2 @@
+FUTURES:
+- sistema que controla mi entrenamiento y estado fisico.

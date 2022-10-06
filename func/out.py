@@ -1,5 +1,4 @@
 from os import _exit
-from tokenize import String
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
@@ -122,7 +121,7 @@ def signout(project, task, description, time):
             print("[!] no alert detected")
             _exit(0)
 
-        sleep(1)
+        sleep(2)
         driver.find_element("id", "btnAceptar").click()
         sleep(2);
 

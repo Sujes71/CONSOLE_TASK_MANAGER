@@ -1,3 +1,0 @@
-Añadir funcionalidad de fichar a una hora concreta quedandose en escucha como ocurre con la alarma o shutdown.
-Añadir funcionalidad de sistema con base de datos que diariamente requiere actualización de si lo consigo y en caso de fallar
-elige una quest de castigo.

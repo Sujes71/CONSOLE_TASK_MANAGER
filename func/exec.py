@@ -1,6 +1,8 @@
 import os
 import webbrowser
 import sqlite3
+import pandas as pd
+from tabulate import tabulate
 
 database = r"DB\db.db"
 
@@ -35,7 +37,7 @@ def create_table():
 def select_all():
     conn = create_connection(database) 
     cur = conn.cursor()
-    cur.execute("SELECT * FROM APPS")
+    cur.execute("SELECT * FROM T_APPS")
 
     rows = cur.fetchall()
     
@@ -46,7 +48,7 @@ def select_all():
 def select_path_byname(name):
     conn = create_connection(database) 
     cur = conn.cursor()
-    cur.execute("SELECT PATH FROM APPS WHERE NAME=? ", (name,))
+    cur.execute("SELECT PATH FROM T_APPS WHERE NAME=? ", (name,))
 
     rows = cur.fetchall()[0][0]
     
@@ -59,7 +61,7 @@ def insert(name, description, path):
     cur = conn.cursor()
     
     tuple = [(name, description, path)]
-    cur.executemany("INSERT INTO APPS VALUES (?,?,?)", tuple)
+    cur.executemany("INSERT INTO T_APPS VALUES (?,?,?)", tuple)
     print('[+] new row inserted successfully')
     
     conn.commit()
@@ -69,11 +71,11 @@ def remove(name):
     conn = create_connection(database) 
     cur = conn.cursor()
    
-    cur.execute("SELECT * FROM APPS WHERE NAME=? ", (name,))
+    cur.execute("SELECT * FROM T_APPS WHERE NAME=? ", (name,))
     row = cur.fetchall()
     
     if row.__len__() == 1:
-        cur.execute("DELETE FROM APPS WHERE NAME=? ", (name,))
+        cur.execute("DELETE FROM T_APPS WHERE NAME=? ", (name,))
         print('[-] row removed successfully')
         conn.commit()
     else:
@@ -84,7 +86,7 @@ def truncate():
     conn = create_connection(database) 
     cur = conn.cursor()
     
-    cur.execute("DELETE FROM APPS")
+    cur.execute("DELETE FROM T_APPS")
     print('[-] truncated successfully')
     
     conn.commit()
@@ -105,9 +107,20 @@ def exec(query):
     else:
         print(f'[!] error: arg1 [{query}]: expected one valid arg1' )
         print("""
-        arg1 = name of the program or web domain, -l/--list to list all available, --add to include a new one, --remove to remove or --init to initialize the table, --truncate to remove all db elements
+        arg1 = name of the program or web domain, -l/--list to list all available, --add to include a new one, --remove to remove or --truncate to remove all db elements
         """ )
         
 def list_apps():
-    for app in select_all():
-        print("%-15s %1s" % (app[0], app[1]))
+    selected = select_all()
+    
+    list_names = []
+    list_descriptions = []
+    
+    for element in selected:
+        list_names.append(element[0])
+        list_descriptions.append(element[1])
+        
+    print("TABLE APPS\n")
+    df = pd.DataFrame({'NAME':list_names, 'DESCRIPTION':list_descriptions})
+    df.index = df.index + 1
+    print(tabulate(df, showindex=True, headers=df.columns))   

@@ -39,7 +39,7 @@ def on_press(key):
             elif current.__contains__(keyboard.Key.shift_l) and (current.__contains__(keyboard.KeyCode(char='x')) or current.__contains__(keyboard.KeyCode(char='X'))):
                 exit()
             current.clear()
-            time.sleep(0.5)
+            time.sleep(1)
             
 def on_release(key):
     try:

@@ -6,8 +6,9 @@ from func.shutdown import shutdown
 from func.out  import signout, listout
 from func.scrap import list_anime, list_league
 from os import _exit
+from func.weight import insert_weight, list_selection, truncate_weight
 
-arg = [ '-h', '--help', '-g', '--generator', '-a', '--alarm', '-e', '--exec', '-s', '--shutdown', '--outsign', '-o', '-sc', '--scrap']
+arg = [ '-h', '--help', '-g', '--generator', '-a', '--alarm', '-e', '--exec', '-s', '--shutdown', '--outsign', '-o', '-sc', '--scrap', '-w', '--weight']
 
 try:
     error = ['argument not recognized', f'error: argument [{sys.argv[1]}]: expected one or two arguments', f'error: argument [{sys.argv[1]}]: expected one argument', f'error: argument [{sys.argv[1]}]: expected four arguments', f'error: argument [{sys.argv[1]}]: expected three arguments', f'error: argument [{sys.argv[1]}]: expected no arguments', f'error: argument [{sys.argv[1]}]: expected three or four arguments']
@@ -32,6 +33,7 @@ def task_help():
                 -s/--shutdown = program a time to shutdown pc
                 -o/--outsign = permits the user to sign out from work metaenlace
                 -sc/--scrap = permits the user to scrapping last animes and football result
+                -w/--weight = permits the user to have a daily control of the weight and meal
                 """ )
     else:
         print('[!] %s ' %(error[5]))
@@ -101,8 +103,6 @@ def task_exec():
     elif len(sys.argv) == 3:  
         if sys.argv[2] == '--list' or sys.argv[2] == '-l':
             list_apps()
-        elif sys.argv[2] == '--init':
-            create_table()
         elif sys.argv[2] == '--add':
                 print('[!] %s ' %(error[4]))
                 print("""
@@ -119,7 +119,7 @@ def task_exec():
             truncate()
             
         elif sys.argv[2] == '?':
-            print('[?] arg1 = name of the program or web domain, -l/--list to list all available, --add to include a new one, --remove to remove or --init to initialize the table, --truncate to remove all db elements')
+            print('[?] arg1 = name of the program or web domain, -l/--list to list all available, --add to include a new one, --remove to remove or --truncate to remove all db elements')
         else:
             exec(sys.argv[2])
         
@@ -156,21 +156,15 @@ def task_exec():
             print("""
             expected no arguments
             """ )
-            
-        elif sys.argv[2] == '--init':
-            print('[!] %s ' %(f'error: argument [{sys.argv[1]} {sys.argv[2]}]: expected no arguments'))
-            print("""
-            expected no arguments
-            """ )
         else:
             print('[!] %s ' %(error[2]))
             print("""
-            arg1 = name of the program or web domain, -l/--list to list all available, --add to include a new one, --remove to remove or --init to initialize the table, --truncate to remove all db elements'
+            arg1 = name of the program or web domain, -l/--list to list all available, --add to include a new one, --remove to remove or --truncate to remove all db elements'
             """ )
     else:
         print('[!] %s ' %(error[2]))
         print("""
-        arg1 = name of the program or web domain, -l/--list to list all available, --add to include a new one, --remove to remove or --init to initialize the table, --truncate to remove all db elements'
+        arg1 = name of the program or web domain, -l/--list to list all available, --add to include a new one, --remove to remove or --truncate to remove all db elements'
         """ )
 
 def task_shutdown():
@@ -287,6 +281,59 @@ def task_scrap():
         print("""
         arg1 = -a/--anime to scrap last anime emissions or -f/--football to scrap last informations about leagues
         """ )
+def task_weight():
+    if len(sys.argv) == 2:
+        print(f'usage: {sys.argv[0]} [{sys.argv[1]}]')
+        print("optional arguments:"+"""
+            -w,  --weight permits the user to have a daily control of the weight and meal
+            """ )
+    elif len(sys.argv) == 3:
+        if sys.argv[2] == '--list' or sys.argv[2] == '-l':
+            list_selection("*")
+        elif sys.argv[2] == '--add':
+            print('[!] %s ' %(f'error: argument [{sys.argv[1]} {sys.argv[2]}]: expected two arguments'))
+            print("""
+            arg1 = the weight of today
+            arg2 = the meal you have eaten today
+            """ )
+        elif sys.argv[2] == '--truncate':
+            truncate_weight()
+            
+        elif sys.argv[2] == '?':
+            print('[?] arg1 = -l/--list to list all available, --add to include a new one, -f/--filter to filter data or --truncate to remove all db elements')
+        else:
+            print('[!] %s ' %(error[2]))
+            print("""
+            arg1 = -l/--list to list all available, --add to include a new one, -f/--filter to filter data or --truncate to remove all db elements
+            """ )
+    elif len(sys.argv) == 4 or len(sys.argv) == 5:
+        if sys.argv[2] == '--filter' or sys.argv[2] == '-f' and len(sys.argv) == 4:
+            list_selection(sys.argv[3])
+        elif sys.argv[2] == '--add':
+            try:
+                if sys.argv[3] == '?':
+                    print('[?] arg1 = the weight of today')
+                elif sys.argv[4] == '?':
+                    print('[?] arg2 = the meal you have eaten today')
+                else:
+                    insert_weight(sys.argv[3], sys.argv[4])
+            except:
+                print('[!] %s ' %(f'error: argument [{sys.argv[1]} {sys.argv[2]}]: expected two arguments'))
+                print("""
+                arg1 = the weight of today
+                arg2 = the meal you have eaten today
+                """ )
+        else:
+            print('[!] %s ' %(error[2]))
+            print("""
+            arg1 = -l/--list to list all available, --add to include a new one, -f/--filter to filter data or --truncate to remove all db elements
+            """ )
+    else:
+        print('[!] %s ' %(error[2]))
+        print("""
+        arg1 = -l/--list to list all available, --add to include a new one, -f/--filter to filter data or --truncate to remove all db elements
+        """ )
+        
         
 sys_args = {
     arg[0]:task_help,
@@ -302,7 +349,9 @@ sys_args = {
     arg[10]:task_signout,
     arg[11]:task_signout,
     arg[12]:task_scrap,
-    arg[13]:task_scrap
+    arg[13]:task_scrap,
+    arg[14]:task_weight,
+    arg[15]:task_weight
 }
 
 try:
