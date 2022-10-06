@@ -26,7 +26,7 @@ def create_table():
                         DATE DATE NOT NULL PRIMARY KEY,
                         WEIGHT DECIMAL NOT NULL,
                         RATIO DECIMAL NOT NULL,
-                        MEAL VARCHAR(50) NOT NULL
+                        MEAL VARCHAR(255) NOT NULL
                     )
                 """)
     print('[+] new table created successfully')
