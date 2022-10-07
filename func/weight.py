@@ -47,23 +47,23 @@ def select_first_last():
 def select_by_query(query):
     if query == '?':
         print('[?] arg1 = insert the query to filter or -fl for get the current weight and the weight before')
-    else:
-        try:
-            if query.isnumeric():
-                raise Exception
-            query = query.upper()
-            conn = create_connection(database) 
-            cur = conn.cursor()
-            cur.execute("select * from t_weight where "+ query)
-            rows = cur.fetchall()
-            conn.close()
-            return rows
-        except:
-            print(f'[!] error: arg1 [{query}]: expected one valid arg1' )
-            print("""
-            arg1 = insert the query to filter or -fl for get the current weight and the weight before
-            """ )  
         _exit(0) 
+    try:
+        if query.isnumeric():
+            raise Exception
+        query = query.upper()
+        conn = create_connection(database) 
+        cur = conn.cursor()
+        cur.execute("select * from t_weight where "+ query)
+        rows = cur.fetchall()
+        conn.close()
+        return rows
+    except:
+        print(f'[!] error: arg1 [{query}]: expected one valid arg1' )
+        print("""
+        arg1 = insert the query to filter or -fl for get the current weight and the weight before
+        """ )  
+    _exit(0) 
 
 def select_all():
     conn = create_connection(database) 
