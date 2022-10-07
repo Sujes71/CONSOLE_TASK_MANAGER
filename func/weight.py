@@ -26,7 +26,8 @@ def create_table():
                         DATE DATE NOT NULL PRIMARY KEY,
                         WEIGHT DECIMAL NOT NULL,
                         RATIO DECIMAL NOT NULL,
-                        MEAL VARCHAR(255) NOT NULL
+                        MEAL VARCHAR(255) NOT NULL,
+                        TRAINED VARCHAR(1) NOT NULL
                     )
                 """)
     print('[+] new table created successfully')
@@ -74,7 +75,7 @@ def select_all_weights():
     
     return rows
     
-def insert_weight(weight, comidas):
+def insert_weight(weight, comidas, trained):
     conn = create_connection(database) 
     cur = conn.cursor()
     
@@ -88,8 +89,8 @@ def insert_weight(weight, comidas):
     else:
         ratio = 0
     
-    tuple = [(now, weight, ratio, comidas)]
-    cur.executemany("INSERT INTO T_WEIGHT VALUES (?,?,?,?)", tuple)
+    tuple = [(now, weight, ratio, comidas, trained)]
+    cur.executemany("INSERT INTO T_WEIGHT VALUES (?,?,?,?,?)", tuple)
     print('[+] new row inserted successfully')
     
     conn.commit()
@@ -115,14 +116,17 @@ def list_selection(query):
     list_ratios = []
     list_comidas = []
     list_dates = []
+    list_trained = []
     
     for element in selected:
+        list_dates.append(element[0])
         list_weights.append(element[1])
         list_ratios.append(element[2])
         list_comidas.append(element[3])
-        list_dates.append(element[0])
+        list_trained.append(element[4])
+        
         
     print("TABLE WEIGHTS\n")
-    df = pd.DataFrame({'WEIGHT':list_weights, 'RATIO':list_ratios, 'MEAL':list_comidas, 'DATE':list_dates})
+    df = pd.DataFrame({'WEIGHT':list_weights, 'RATIO':list_ratios, 'MEAL':list_comidas, 'TRAINED':list_trained, 'DATE':list_dates})
     df.index = df.index + 1
     print(tabulate(df, showindex=True, headers=df.columns))

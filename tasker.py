@@ -291,10 +291,11 @@ def task_weight():
         if sys.argv[2] == '--list' or sys.argv[2] == '-l':
             list_selection("*")
         elif sys.argv[2] == '--add':
-            print('[!] %s ' %(f'error: argument [{sys.argv[1]} {sys.argv[2]}]: expected two arguments'))
+            print('[!] %s ' %(error[4]))
             print("""
             arg1 = the weight of today
             arg2 = the meal you have eaten today
+            arg3 = 'S' if you trained or 'N' if not
             """ )
         elif sys.argv[2] == '--truncate':
             truncate_weight()
@@ -306,7 +307,7 @@ def task_weight():
             print("""
             arg1 = -l/--list to list all available, --add to include a new one, -f/--filter to filter data or --truncate to remove all db elements
             """ )
-    elif len(sys.argv) == 4 or len(sys.argv) == 5:
+    elif len(sys.argv) == 4 or len(sys.argv) == 6:
         if sys.argv[2] == '--filter' or sys.argv[2] == '-f' and len(sys.argv) == 4:
             list_selection(sys.argv[3])
         elif sys.argv[2] == '--add':
@@ -315,13 +316,16 @@ def task_weight():
                     print('[?] arg1 = the weight of today')
                 elif sys.argv[4] == '?':
                     print('[?] arg2 = the meal you have eaten today')
+                elif sys.argv[5] == '?':
+                    print('[?] arg3 = S if you trained or N if not')
                 else:
-                    insert_weight(sys.argv[3], sys.argv[4])
+                    insert_weight(sys.argv[3], sys.argv[4], sys.argv[5])
             except:
-                print('[!] %s ' %(f'error: argument [{sys.argv[1]} {sys.argv[2]}]: expected two arguments'))
+                print('[!] %s ' %(error[4]))
                 print("""
                 arg1 = the weight of today
                 arg2 = the meal you have eaten today
+                arg3 = 'S' if you trained or 'N' if not
                 """ )
         else:
             print('[!] %s ' %(error[2]))
