@@ -27,7 +27,7 @@ def create_table():
                         WEIGHT DECIMAL NOT NULL,
                         RATIO DECIMAL NOT NULL,
                         MEAL VARCHAR(255) NOT NULL,
-                        TRAINED VARCHAR(10) NOT NULL
+                        TRAINED BOOLEAN NOT NULL
                     )
                 """)
     print('[+] new table created successfully')
@@ -45,6 +45,8 @@ def select_first_last():
         return rows
 
 def select_by_query(query):
+    if query == '?':
+        print('[?] arg1 = insert the query to filter or -fl for get the current weight and the weight before')
     try:
         if query.isnumeric():
             raise Exception
@@ -58,7 +60,7 @@ def select_by_query(query):
     except:
         print(f'[!] error: arg1 [{query}]: expected one valid arg1' )
         print("""
-        arg1 = insert the query to filter or -fl for get the current weight and the before weight
+        arg1 = insert the query to filter or -fl for get the current weight and the weight before
         """ )  
     _exit(0) 
 
@@ -92,13 +94,18 @@ def insert_weight(weight, comidas, trained):
     
     ratios = select_all_weights()
     
+    if trained == "true" or trained == "TRUE":
+        trained =  True
+    elif trained == "false" or trained == "FALSE":
+        trained = False
+    
     if len(ratios) != 0: 
         ratio = weight - float(ratios[len(ratios) - 1][0])
         ratio = round(ratio, 2)
     else:
         ratio = 0
     
-    tuple = [("2022-12-10", weight, ratio, comidas, trained)]
+    tuple = [(now, weight, ratio, comidas, trained)]
     cur.executemany("INSERT INTO T_WEIGHT VALUES (?,?,?,?,?)", tuple)
     print('[+] new row inserted successfully')
     
