@@ -27,13 +27,22 @@ def create_table():
                         WEIGHT DECIMAL NOT NULL,
                         RATIO DECIMAL NOT NULL,
                         MEAL VARCHAR(255) NOT NULL,
-                        TRAINED VARCHAR(1) NOT NULL
+                        TRAINED VARCHAR(10) NOT NULL
                     )
                 """)
     print('[+] new table created successfully')
     
     conn.commit()
     conn.close()
+
+def select_first_last():
+        conn = create_connection(database) 
+        cur = conn.cursor()
+        rows = []
+        cur.execute("SELECT * FROM (SELECT * FROM t_weight ORDER BY DATE DESC LIMIT 1), (SELECT * FROM t_weight ORDER BY DATE ASC LIMIT 1) ORDER BY DATE DESC")
+        rows = cur.fetchall()
+        conn.close()
+        return rows
 
 def select_by_query(query):
     try:
@@ -49,7 +58,7 @@ def select_by_query(query):
     except:
         print(f'[!] error: arg1 [{query}]: expected one valid arg1' )
         print("""
-        arg1 = filter that permits you filter from db the information
+        arg1 = insert the query to filter or -fl for get the current weight and the before weight
         """ )  
     _exit(0) 
 
@@ -84,12 +93,12 @@ def insert_weight(weight, comidas, trained):
     ratios = select_all_weights()
     
     if len(ratios) != 0: 
-        ratio = weight - int(ratios[len(ratios) - 1][0])
+        ratio = weight - float(ratios[len(ratios) - 1][0])
         ratio = round(ratio, 2)
     else:
         ratio = 0
     
-    tuple = [(now, weight, ratio, comidas, trained)]
+    tuple = [("2022-12-10", weight, ratio, comidas, trained)]
     cur.executemany("INSERT INTO T_WEIGHT VALUES (?,?,?,?,?)", tuple)
     print('[+] new row inserted successfully')
     
@@ -107,26 +116,44 @@ def truncate_weight():
     conn.close()
     
 def list_selection(query):
-    if query == "*":
-        selected = select_all()
-    else:
-        selected = select_by_query(query)
-
     list_weights = []
     list_ratios = []
     list_comidas = []
     list_dates = []
     list_trained = []
     
-    for element in selected:
-        list_dates.append(element[0])
-        list_weights.append(element[1])
-        list_ratios.append(element[2])
-        list_comidas.append(element[3])
-        list_trained.append(element[4])
+    if query == "*":
+        selected = select_all()
+    elif query == "-fl":
+        selected = select_first_last()
+    else:
+        selected = select_by_query(query)
+    
+    if query == "-fl":
+        for element in selected:
+            list_dates.append(element[0])
+            list_weights.append(element[1])
+            list_ratios.append(element[2])
+            list_comidas.append(element[3])
+            list_trained.append(element[4])
+            list_dates.append(element[5])
+            list_weights.append(element[6])
+            list_ratios.append(element[7])
+            list_comidas.append(element[8])
+            list_trained.append(element[9])
+        print("TABLE WEIGHTS\n")
+        df = pd.DataFrame({'WEIGHT':list_weights, 'RATIO':list_ratios, 'MEAL':list_comidas, 'TRAINED':list_trained, 'DATE':list_dates})
+        index = ["CURRENT", "BEFORE"]
+        df.index = index
+    else:
+        for element in selected:
+            list_dates.append(element[0])
+            list_weights.append(element[1])
+            list_ratios.append(element[2])
+            list_comidas.append(element[3])
+            list_trained.append(element[4])
+        print("TABLE WEIGHTS\n")
+        df = pd.DataFrame({'WEIGHT':list_weights, 'RATIO':list_ratios, 'MEAL':list_comidas, 'TRAINED':list_trained, 'DATE':list_dates})
+        df.index = df.index + 1
         
-        
-    print("TABLE WEIGHTS\n")
-    df = pd.DataFrame({'WEIGHT':list_weights, 'RATIO':list_ratios, 'MEAL':list_comidas, 'TRAINED':list_trained, 'DATE':list_dates})
-    df.index = df.index + 1
-    print(tabulate(df, showindex=True, headers=df.columns))
+    print(tabulate(df, showindex=True, headers=df.columns)) 

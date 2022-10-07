@@ -309,7 +309,11 @@ def task_weight():
             """ )
     elif len(sys.argv) == 4 or len(sys.argv) == 6:
         if sys.argv[2] == '--filter' or sys.argv[2] == '-f' and len(sys.argv) == 4:
-            list_selection(sys.argv[3])
+            if sys.argv[3] != '-fl':
+                list_selection(sys.argv[3])
+            else:
+                list_selection(sys.argv[3])
+                
         elif sys.argv[2] == '--add':
             try:
                 if sys.argv[3] == '?':
