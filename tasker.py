@@ -6,7 +6,7 @@ from func.shutdown import shutdown
 from func.out  import signout, listout
 from func.scrap import list_anime, list_league
 from os import _exit
-from func.weight import insert_weight, list_selection, truncate_weight
+from func.weight import insert_weight, list_selection, truncate_weight, remove_weight, query
 
 arg = [ '-h', '--help', '-g', '--generator', '-a', '--alarm', '-e', '--exec', '-s', '--shutdown', '--outsign', '-o', '-sc', '--scrap', '-w', '--weight']
 
@@ -295,24 +295,22 @@ def task_weight():
             print("""
             arg1 = the weight of today
             arg2 = the meal you have eaten today
-            arg3 = 'S' if you trained or 'N' if not
+            arg3 = true if you trained or false if not
             """ )
         elif sys.argv[2] == '--truncate':
             truncate_weight()
             
         elif sys.argv[2] == '?':
-            print('[?] arg1 = -l/--list to list all available, --add to include a new one, -f/--filter to filter data or --truncate to remove all db elements')
+            print('[?] arg1 = -l/--list to list all available, --add to include a new one, --filter to filter data, --truncate to remove elements in t_weight \nor --query '+
+            'to select, add, remove or update')
         else:
             print('[!] %s ' %(error[2]))
             print("""
-            arg1 = -l/--list to list all available, --add to include a new one, -f/--filter to filter data or --truncate to remove all db elements
+            arg1 = -l/--list to list all available, --add to include a new one, --filter to filter data, --truncate to remove elements in t_weight \n            or --query to select, add, remove or update
             """ )
     elif len(sys.argv) == 4 or len(sys.argv) == 6:
-        if sys.argv[2] == '--filter' or sys.argv[2] == '-f' and len(sys.argv) == 4:
-            if sys.argv[3] != '-fl':
-                list_selection(sys.argv[3])
-            else:
-                list_selection(sys.argv[3])
+        if sys.argv[2] == '--filter' and len(sys.argv) == 4:
+            list_selection(sys.argv[3])
                 
         elif sys.argv[2] == '--add':
             try:
@@ -321,7 +319,7 @@ def task_weight():
                 elif sys.argv[4] == '?':
                     print('[?] arg2 = the meal you have eaten today')
                 elif sys.argv[5] == '?':
-                    print('[?] arg3 = S if you trained or N if not')
+                    print('[?] arg3 = true if you trained or false if not')
                 else:
                     insert_weight(sys.argv[3], sys.argv[4], sys.argv[5])
             except:
@@ -329,17 +327,34 @@ def task_weight():
                 print("""
                 arg1 = the weight of today
                 arg2 = the meal you have eaten today
-                arg3 = 'S' if you trained or 'N' if not
+                arg3 = true if you trained or false if not
                 """ )
+        elif sys.argv[2] == '--truncate':
+            try:
+                
+                if sys.argv[3] == '?':
+                    print('[?] arg1 = the query filter to remove in db')
+                else:
+                    remove_weight(sys.argv[3])
+            except:
+                print('[!] %s ' %(f'error: argument [{sys.argv[1]} {sys.argv[2]}]: expected one argument'))
+                print("""
+                arg1 = the query filter to remove in db
+                """ )
+        elif sys.argv[2] == '--query':
+            if sys.argv[3] == '?':
+                    print('[?] arg1 = valid query to select, add, remove or update values from t_weight')
+            else:
+                query(sys.argv[3])
         else:
             print('[!] %s ' %(error[2]))
             print("""
-            arg1 = -l/--list to list all available, --add to include a new one, -f/--filter to filter data or --truncate to remove all db elements
+            arg1 = -l/--list to list all available, --add to include a new one, --filter to filter data, --truncate to remove elements in t_weight \n            or --query to select, add, remove or update
             """ )
     else:
         print('[!] %s ' %(error[2]))
         print("""
-        arg1 = -l/--list to list all available, --add to include a new one, -f/--filter to filter data or --truncate to remove all db elements
+        arg1 = -l/--list to list all available, --add to include a new one, --filter to filter data, --truncate to remove elements in t_weight \n            or --query to select, add, remove or update
         """ )
         
         

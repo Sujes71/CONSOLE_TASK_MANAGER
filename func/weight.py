@@ -1,6 +1,7 @@
 import sqlite3
 import os
 from datetime import date
+from tokenize import String
 import pandas as pd
 from tabulate import tabulate
 from os import _exit
@@ -90,7 +91,7 @@ def select_all_weights():
 def insert_weight(weight, comidas, trained):
     conn = create_connection(database) 
     cur = conn.cursor()
-    
+
     now = date.today()
     
     ratios = select_all_weights()
@@ -99,19 +100,51 @@ def insert_weight(weight, comidas, trained):
         trained =  True
     elif trained == "false" or trained == "FALSE":
         trained = False
-    
+        
     if len(ratios) != 0: 
-        ratio = weight - float(ratios[len(ratios) - 1][0])
-        ratio = round(ratio, 2)
+        ratio = float(weight) - float(ratios[len(ratios) - 1][0])
+        ratio = round(ratio, 2)   
     else:
         ratio = 0
     
     tuple = [(now, weight, ratio, comidas, trained)]
+    
     cur.executemany("INSERT INTO T_WEIGHT VALUES (?,?,?,?,?)", tuple)
     print('[+] new row inserted successfully')
     
     conn.commit()
     conn.close()
+    
+def remove_weight(query):
+    conn = create_connection(database) 
+    cur = conn.cursor()
+    cur.execute("DELETE FROM T_WEIGHT WHERE " + query)
+
+    rows = cur.fetchall()
+    
+    conn.close()
+    
+    return rows
+
+def query(query):  
+    try:
+        conn = create_connection(database) 
+        cur = conn.cursor()
+        cur.execute(query)
+        
+        if "SELECT" in query or "select" in query: 
+            rows = cur.fetchall()
+            conn.close()
+            list_selection(rows)
+        else:
+            conn.commit()
+            conn.close()
+    except:
+        print(f'[!] error: arg1 [{query}]: expected one valid arg1' )
+        print("""
+        arg1 = valid query to filter, add, remove or update values from t_weight
+        """ )  
+        _exit(0)
     
 def truncate_weight():
     conn = create_connection(database) 
@@ -130,7 +163,9 @@ def list_selection(query):
     list_dates = []
     list_trained = []
     
-    if query == "*":
+    if not isinstance(query, str):
+        selected = query 
+    elif query == "*":
         selected = select_all()
     elif query == "-fl":
         selected = select_first_last()
@@ -164,4 +199,4 @@ def list_selection(query):
         df = pd.DataFrame({'WEIGHT':list_weights, 'RATIO':list_ratios, 'MEAL':list_comidas, 'TRAINED':list_trained, 'DATE':list_dates})
         df.index = df.index + 1
         
-    print(tabulate(df, showindex=True, headers=df.columns)) 
+    print(tabulate(df, showindex=True, headers=df.columns))
