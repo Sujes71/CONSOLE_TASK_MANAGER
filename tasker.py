@@ -5,10 +5,11 @@ from func.exec import exec, insert, list_apps, remove, create_table, truncate
 from func.shutdown import shutdown
 from func.out  import signout, listout
 from func.scrap import list_anime, list_league
-from os import _exit
 from func.weight import insert_weight, list_selection, truncate_weight, remove_weight, query
+from func.games.rps_game import rps_game
+from func.games.russian_game import russian_game
 
-arg = [ '-h', '--help', '-g', '--generator', '-a', '--alarm', '-e', '--exec', '-s', '--shutdown', '--outsign', '-o', '-sc', '--scrap', '-w', '--weight']
+arg = [ '-h', '--help', '-g', '--generator', '-a', '--alarm', '-e', '--exec', '-s', '--shutdown', '--outsign', '-o', '-sc', '--scrap', '-w', '--weight', '-g', '--game']
 
 try:
     error = ['argument not recognized', f'error: argument [{sys.argv[1]}]: expected one or two arguments', f'error: argument [{sys.argv[1]}]: expected one argument', f'error: argument [{sys.argv[1]}]: expected four arguments', f'error: argument [{sys.argv[1]}]: expected three arguments', f'error: argument [{sys.argv[1]}]: expected no arguments', f'error: argument [{sys.argv[1]}]: expected three or four arguments']
@@ -18,7 +19,7 @@ except:
     print("optional arguments:"+"""
                 -h,  --help  show the avaiable arguments
                 """ )
-    _exit(0)
+    quit()
     
 def task_help():
     if len(sys.argv) == 2:
@@ -34,6 +35,7 @@ def task_help():
                 -o/--outsign = permits the user to sign out from work metaenlace
                 -sc/--scrap = permits the user to scrapping last animes and football result
                 -w/--weight = permits the user to have a daily control of the weight and meal
+                -g/--game permits the user to select multiple options of games
                 """ )
     else:
         print('[!] %s ' %(error[5]))
@@ -352,11 +354,62 @@ def task_weight():
             arg1 = -l/--list to list all available, --add to include a new one, --filter to filter data, --truncate to remove elements in t_weight \n            or --query to select, add, remove or update
             """ )
     else:
-        print('[!] %s ' %(error[2]))
+        print('[!] %s ' %(f'error: argument [{sys.argv[1]} {sys.argv[2]}]: expected one argument'))
         print("""
         arg1 = -l/--list to list all available, --add to include a new one, --filter to filter data, --truncate to remove elements in t_weight \n            or --query to select, add, remove or update
         """ )
-        
+def task_game():
+    if len(sys.argv) == 2:
+        print(f'usage: {sys.argv[0]} [{sys.argv[1]}]')
+        print("optional arguments:"+"""to
+            -g,  --game permits the user to select multiple options of games
+            """ )
+    elif len(sys.argv) == 3:
+        if sys.argv[2] == '?':
+            print('[?] arg1 = -rps to choose rock, paper or scissors game, ...')
+        elif sys.argv[2] == '-rps':
+            print('[?] this is the rock, paper or scissors game, if you want to play just put your selection here instead')
+        elif sys.argv[2] == '-rg':
+            print('[?] this the russian roulette game modified for being more fair')
+        else:
+            print('[!] %s ' %(f'error: argument [{sys.argv[1]} {sys.argv[2]}]: expected one argument'))
+            print("""
+            arg1 = -rps to choose rock, paper or scissors game, -rg to choose the russian roulete, ...
+            """ )
+    elif len(sys.argv) == 4:
+        if sys.argv[2] == '?':
+             print('[?] arg1 = -rps to choose rock, paper or scissors game, -rg to choose the russian roulete, ...')
+        elif sys.argv[2] == '-rps':
+            if sys.argv[3] == '?':
+                print('[?] arg2 = choose rock, paper or scissors')
+            else:
+                rps_game(sys.argv[3])
+        elif sys.argv[2] == '-rg':
+            if sys.argv[3] == '?':
+                print('[?] arg2 = introduce the number of players')
+            else:
+                russian_game(int(sys.argv[3]), None)
+    elif len(sys.argv) == 5:
+        if sys.argv[2] == '?':
+             print('[?] arg1 = -rps to choose rock, paper or scissors game, -rg to choose the russian roulete, ...')
+        elif sys.argv[2] == '-rg':
+            if sys.argv[3] == '?':
+                print('[?] arg2 = introduce the number of players')
+            elif sys.argv[4] == '?':
+                print('[?] arg3 = introduce the number of rounds for multiply gun charmbers')
+            else:
+                russian_game(int(sys.argv[3]), int(sys.argv[4]))
+            
+        else:
+            print('[!] %s ' %(f'error: argument [{sys.argv[1]} {sys.argv[2]}]: expected one argument'))
+            print("""
+            arg1 = -rps to choose rock, paper or scissors game, -rg to choose the russian roulete, ...
+            """ )
+    else:
+        print('[!] %s ' %(f'error: argument [{sys.argv[1]} {sys.argv[2]}]: expected one argument'))
+        print("""
+        arg1 = -rps to choose rock, paper or scissors game, -rg to choose the russian roulete, ...
+        """ )
         
 sys_args = {
     arg[0]:task_help,
@@ -374,7 +427,9 @@ sys_args = {
     arg[12]:task_scrap,
     arg[13]:task_scrap,
     arg[14]:task_weight,
-    arg[15]:task_weight
+    arg[15]:task_weight,
+    arg[16]:task_game,
+    arg[17]:task_game
 }
 
 try:

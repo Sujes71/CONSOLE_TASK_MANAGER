@@ -2,7 +2,7 @@ import datetime
 import os
 import keyboard
 import pywhatkit
-
+from time import sleep
 
 dirname = os.path.dirname(__file__)
 
@@ -30,8 +30,8 @@ def ring(time, text):
                 arg1 = time to ring alarm HH:MM:SS or HH:MM 
                     """ )
                 break
-                
-        if currenttime == timeset:
+            sleep(30) 
+        if currenttime >= timeset:
             if text == 'None':
                 os.startfile(dirname + '\\..\\sounds\\alarm.mp3')
             else:

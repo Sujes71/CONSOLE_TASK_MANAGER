@@ -1,5 +1,3 @@
-from genericpath import isdir, isfile
-from itertools import count
 import os
 
 def createFile(filename):

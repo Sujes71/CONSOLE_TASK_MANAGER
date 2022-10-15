@@ -33,10 +33,10 @@ def list_anime():
     
 def list_league(comp):
     url = None
-    if comp == 'laliga':
+    if comp == '-laliga':
         url = 'https://resultados.as.com/resultados/futbol/primera/clasificacion/'
         result_url = 'https://resultados.as.com/resultados/futbol/primera/jornada/'
-    elif comp == 'premier':
+    elif comp == '-premier':
         url = 'https://resultados.as.com/resultados/futbol/inglaterra/clasificacion/'
         result_url = 'https://resultados.as.com/resultados/futbol/inglaterra/jornada/'
         

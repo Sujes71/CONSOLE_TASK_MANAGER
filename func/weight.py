@@ -4,7 +4,6 @@ from datetime import date
 from tokenize import String
 import pandas as pd
 from tabulate import tabulate
-from os import _exit
 
 
 database = r"DB\db.db"
@@ -23,7 +22,7 @@ def create_table():
     cur = conn.cursor()
         
     cur.execute(f"""
-                    CREATE TABLE T_WEIGHT(
+                    CREATE TABLE T_WEIGHTS(
                         DATE DATE NOT NULL PRIMARY KEY,
                         WEIGHT DECIMAL NOT NULL,
                         RATIO DECIMAL NOT NULL,
@@ -40,7 +39,7 @@ def select_first_last():
         conn = create_connection(database) 
         cur = conn.cursor()
         rows = []
-        cur.execute("SELECT * FROM (SELECT * FROM t_weight ORDER BY DATE DESC LIMIT 1), (SELECT * FROM t_weight ORDER BY DATE ASC LIMIT 1) ORDER BY DATE DESC")
+        cur.execute("SELECT * FROM (SELECT * FROM t_weights ORDER BY DATE DESC LIMIT 1), (SELECT * FROM t_weights ORDER BY DATE ASC LIMIT 1) ORDER BY DATE DESC")
         rows = cur.fetchall()
         conn.close()
         return rows
@@ -48,14 +47,14 @@ def select_first_last():
 def select_by_query(query):
     if query == '?':
         print('[?] arg1 = insert the query to filter or -fl for get the current weight and the weight before')
-        _exit(0) 
+        quit()
     try:
         if query.isnumeric():
             raise Exception
         query = query.upper()
         conn = create_connection(database) 
         cur = conn.cursor()
-        cur.execute("select * from t_weight where "+ query)
+        cur.execute("select * from t_weights where "+ query)
         rows = cur.fetchall()
         conn.close()
         return rows
@@ -64,12 +63,12 @@ def select_by_query(query):
         print("""
         arg1 = insert the query to filter or -fl for get the current weight and the weight before
         """ )  
-    _exit(0) 
+    quit() 
 
 def select_all():
     conn = create_connection(database) 
     cur = conn.cursor()
-    cur.execute("SELECT * FROM T_WEIGHT ORDER BY DATE DESC")
+    cur.execute("SELECT * FROM T_WEIGHTS ORDER BY DATE DESC")
 
     rows = cur.fetchall()
     
@@ -80,7 +79,7 @@ def select_all():
 def select_all_weights():
     conn = create_connection(database) 
     cur = conn.cursor()
-    cur.execute("SELECT WEIGHT FROM T_WEIGHT ORDER BY DATE DESC")
+    cur.execute("SELECT WEIGHT FROM T_WEIGHTS ORDER BY DATE DESC")
 
     rows = cur.fetchall()
     
@@ -109,7 +108,7 @@ def insert_weight(weight, comidas, trained):
     
     tuple = [(now, weight, ratio, comidas, trained)]
     
-    cur.executemany("INSERT INTO T_WEIGHT VALUES (?,?,?,?,?)", tuple)
+    cur.executemany("INSERT INTO T_WEIGHTS VALUES (?,?,?,?,?)", tuple)
     print('[+] new row inserted successfully')
     
     conn.commit()
@@ -118,13 +117,10 @@ def insert_weight(weight, comidas, trained):
 def remove_weight(query):
     conn = create_connection(database) 
     cur = conn.cursor()
-    cur.execute("DELETE FROM T_WEIGHT WHERE " + query)
-
-    rows = cur.fetchall()
-    
+    cur.execute("DELETE FROM T_WEIGHTS WHERE " + query)
     conn.close()
     
-    return rows
+    print('[-] deleted successfully')
 
 def query(query):  
     try:
@@ -137,20 +133,26 @@ def query(query):
             conn.close()
             list_selection(rows)
         else:
+            if "insert" in query or "INSERT" in query:
+                print('[+] new row inserted successfully')
+            elif "update" in query or "UPDATE" in query:
+                print('[+] updated successfully')
+            elif "delete" in query or "DELETE" in query:
+                print('[-] deleted successfully')
             conn.commit()
             conn.close()
     except:
         print(f'[!] error: arg1 [{query}]: expected one valid arg1' )
         print("""
-        arg1 = valid query to filter, add, remove or update values from t_weight
+        arg1 = valid query to filter, add, remove or update values from t_weights
         """ )  
-        _exit(0)
+        quit()
     
 def truncate_weight():
     conn = create_connection(database) 
     cur = conn.cursor()
     
-    cur.execute("DELETE FROM T_WEIGHT")
+    cur.execute("DELETE FROM T_WEIGHTS")
     print('[-] truncated successfully')
     
     conn.commit()
@@ -189,12 +191,19 @@ def list_selection(query):
         index = ["CURRENT", "BEFORE"]
         df.index = index
     else:
-        for element in selected:
-            list_dates.append(element[0])
-            list_weights.append(element[1])
-            list_ratios.append(element[2])
-            list_comidas.append(element[3])
-            list_trained.append(element[4])
+        if (len(selected[0]) == 5):
+            for element in selected:
+                list_dates.append(element[0])
+                list_weights.append(element[1])
+                list_ratios.append(element[2])
+                list_comidas.append(element[3])
+                list_trained.append(element[4])
+            
+        else:
+            for element in selected:
+                print(element)
+            quit()
+
         print("TABLE WEIGHTS\n")
         df = pd.DataFrame({'WEIGHT':list_weights, 'RATIO':list_ratios, 'MEAL':list_comidas, 'TRAINED':list_trained, 'DATE':list_dates})
         df.index = df.index + 1

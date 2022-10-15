@@ -1,4 +1,3 @@
-from os import _exit
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
@@ -20,7 +19,7 @@ url = "http://81.47.129.87:8080/"
 def signout(project, task, description, time):
     if len(description) < 20:
         print("[!] Please enter a description with a length of more than 20 characters")
-        _exit(0)
+        quit()
         
     done = True
     currenttime = datetime.now().strftime('%H%M%S')
@@ -43,15 +42,15 @@ def signout(project, task, description, time):
                     print("""
                     arg4 = time to sign out <optional>
                         """ )
-                    _exit(0)
-                    
-            if currenttime == timeset:
+                    quit()
+                sleep(30)
+            if currenttime >= timeset:
                 done = True
                 break
             
             elif keyboard.is_pressed('supr'):
                 print('[-] sign out time desactivated')
-                _exit(0)
+                quit()
             
     if time == 'default' or time == '*':
         timeset = 0
@@ -68,14 +67,15 @@ def signout(project, task, description, time):
                 
                 t = ':'.join(timeset[i:i+2] for i in range(0, len(timeset), 2))
                 print(f'[+] sign out time configured at {t}')
-
-            if currenttime == timeset:
+                
+                sleep(30)
+            if currenttime >= timeset:
                 done = True
                 break
             
             elif keyboard.is_pressed('supr'):
                 print('[-] sign out time desactivated')
-                _exit(0)
+                quit()
     if done:
         iter = 2
         button_iter = 0
@@ -119,7 +119,7 @@ def signout(project, task, description, time):
             alert.accept()
         except TimeoutException:
             print("[!] no alert detected")
-            _exit(0)
+            quit()
 
         sleep(2)
         driver.find_element("id", "btnAceptar").click()
