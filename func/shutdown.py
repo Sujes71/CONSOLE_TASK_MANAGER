@@ -1,7 +1,6 @@
 import datetime
 import os
 import keyboard
-from time import sleep
 
 def shutdown(time):
     done = True
@@ -27,8 +26,8 @@ def shutdown(time):
                 arg1 = time to shutdown HH:MM:SS or HH:MM
                 """ )
                 break
-            sleep(30)
-        if currenttime >= timeset:
+        
+        if currenttime == timeset:
             os.system("shutdown /s /t 1")
             break
         

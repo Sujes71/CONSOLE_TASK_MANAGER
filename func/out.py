@@ -8,6 +8,7 @@ from selenium.webdriver.support.select import Select
 from time import sleep
 from datetime import datetime
 import keyboard
+from os import _exit
 
 options = webdriver.ChromeOptions()
 options.add_experimental_option("detach", True)
@@ -19,7 +20,7 @@ url = "http://81.47.129.87:8080/"
 def signout(project, task, description, time):
     if len(description) < 20:
         print("[!] Please enter a description with a length of more than 20 characters")
-        quit()
+        _exit(1)
         
     done = True
     currenttime = datetime.now().strftime('%H%M%S')
@@ -42,19 +43,18 @@ def signout(project, task, description, time):
                     print("""
                     arg4 = time to sign out <optional>
                         """ )
-                    quit()
-                sleep(30)
-            if currenttime >= timeset:
+                    _exit(1)
+            
+            if currenttime == timeset:
                 done = True
                 break
             
             elif keyboard.is_pressed('supr'):
                 print('[-] sign out time desactivated')
-                quit()
+                _exit(1)
             
     if time == 'default' or time == '*':
         timeset = 0
-        
         while True:
             currenttime = datetime.now().strftime('%H%M%S')
             
@@ -68,14 +68,14 @@ def signout(project, task, description, time):
                 t = ':'.join(timeset[i:i+2] for i in range(0, len(timeset), 2))
                 print(f'[+] sign out time configured at {t}')
                 
-                sleep(30)
-            if currenttime >= timeset:
+            
+            if currenttime == timeset:
                 done = True
                 break
             
             elif keyboard.is_pressed('supr'):
                 print('[-] sign out time desactivated')
-                quit()
+                _exit(1)
     if done:
         iter = 2
         button_iter = 0
@@ -100,11 +100,8 @@ def signout(project, task, description, time):
         Select(driver.find_element("name", f"ctl00$MainContentPlaceHolder$RepetidorDia$ctl0{datetime.today().weekday()}$GridView_dia$ctl0{iter}$ddlTareas")).options[int(task)].click()
         driver.find_element("id", f"MainContentPlaceHolder_RepetidorDia_GridView_dia_{datetime.today().weekday()}_buttonComment_{button_iter}").click();
         driver.find_element("name", f"ctl00$MainContentPlaceHolder$RepetidorDia$ctl0{datetime.today().weekday()}$GridView_dia$ctl0{iter}$Observaciones").send_keys(description)
-        if iter > 2 and (datetime.today().weekday() == 0 or datetime.today().weekday() == 2):
-            if abs(int(currenttime) - 150000) < abs(int(currenttime) - 183000):
-                driver.find_element("name", f"ctl00$MainContentPlaceHolder$RepetidorDia$ctl0{datetime.today().weekday()}$GridView_dia$ctl0{iter}$Inicio").send_keys('08:00:00')
-            else:                            
-                driver.find_element("name", f"ctl00$MainContentPlaceHolder$RepetidorDia$ctl0{datetime.today().weekday()}$GridView_dia$ctl0{iter}$Inicio").send_keys('15:00:00')
+        if iter > 2:
+            driver.find_element("name", f"ctl00$MainContentPlaceHolder$RepetidorDia$ctl0{datetime.today().weekday()}$GridView_dia$ctl0{iter}$Inicio").send_keys('16:00:00')
             
         sleep(0.5)
         driver.find_element("id", "MainContentPlaceHolder_ButtonEntrada").click()
@@ -119,7 +116,7 @@ def signout(project, task, description, time):
             alert.accept()
         except TimeoutException:
             print("[!] no alert detected")
-            quit()
+            _exit(1)
 
         sleep(2)
         driver.find_element("id", "btnAceptar").click()

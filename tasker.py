@@ -9,7 +9,7 @@ from func.weight import insert_weight, list_selection, truncate_weight, remove_w
 from func.games.rps_game import rps_game
 from func.games.russian_game import russian_game
 
-arg = [ '-h', '--help', '-g', '--generator', '-a', '--alarm', '-e', '--exec', '-s', '--shutdown', '--outsign', '-o', '-sc', '--scrap', '-w', '--weight', '-g', '--game']
+arg = [ '-h', '--help', '-g', '--generator', '-a', '--alarm', '-e', '--exec', '-s', '--shutdown', '--outsign', '-o', '-sc', '--scrap', '-w', '--weight', '-ga', '--game']
 
 try:
     error = ['argument not recognized', f'error: argument [{sys.argv[1]}]: expected one or two arguments', f'error: argument [{sys.argv[1]}]: expected one argument', f'error: argument [{sys.argv[1]}]: expected four arguments', f'error: argument [{sys.argv[1]}]: expected three arguments', f'error: argument [{sys.argv[1]}]: expected no arguments', f'error: argument [{sys.argv[1]}]: expected three or four arguments']
@@ -35,7 +35,7 @@ def task_help():
                 -o/--outsign = permits the user to sign out from work metaenlace
                 -sc/--scrap = permits the user to scrapping last animes and football result
                 -w/--weight = permits the user to have a daily control of the weight and meal
-                -g/--game permits the user to select multiple options of games
+                -ga/--game permits the user to select multiple options of games
                 """ )
     else:
         print('[!] %s ' %(error[5]))
@@ -362,7 +362,7 @@ def task_game():
     if len(sys.argv) == 2:
         print(f'usage: {sys.argv[0]} [{sys.argv[1]}]')
         print("optional arguments:"+"""to
-            -g,  --game permits the user to select multiple options of games
+            -ga,  --game permits the user to select multiple options of games
             """ )
     elif len(sys.argv) == 3:
         if sys.argv[2] == '?':

@@ -1,9 +1,9 @@
 import sqlite3
 import os
 from datetime import date
-from tokenize import String
 import pandas as pd
 from tabulate import tabulate
+from os import _exit
 
 
 database = r"DB\db.db"
@@ -47,7 +47,7 @@ def select_first_last():
 def select_by_query(query):
     if query == '?':
         print('[?] arg1 = insert the query to filter or -fl for get the current weight and the weight before')
-        quit()
+        _exit(1)
     try:
         if query.isnumeric():
             raise Exception
@@ -63,7 +63,7 @@ def select_by_query(query):
         print("""
         arg1 = insert the query to filter or -fl for get the current weight and the weight before
         """ )  
-    quit() 
+    _exit(1)
 
 def select_all():
     conn = create_connection(database) 
@@ -146,7 +146,7 @@ def query(query):
         print("""
         arg1 = valid query to filter, add, remove or update values from t_weights
         """ )  
-        quit()
+        _exit(1)
     
 def truncate_weight():
     conn = create_connection(database) 
@@ -202,7 +202,7 @@ def list_selection(query):
         else:
             for element in selected:
                 print(element)
-            quit()
+            _exit(1)
 
         print("TABLE WEIGHTS\n")
         df = pd.DataFrame({'WEIGHT':list_weights, 'RATIO':list_ratios, 'MEAL':list_comidas, 'TRAINED':list_trained, 'DATE':list_dates})

@@ -1,7 +1,7 @@
 from pynput import keyboard
 from random import randint
 from time import sleep
-from os import system
+from os import system, _exit
 
 def russian_game(num_players, round):
     global list_players, turn, bullet, current_player, chamber, list_players_alive
@@ -39,13 +39,13 @@ def russian_game(num_players, round):
 def on_press(key):
     if key == keyboard.Key.delete:
         print('[-] russian game cancelled')
-        quit()
+        _exit(1)
     if key == keyboard.Key.enter: 
         global list_players, turn, bullet, current_player, chamber, list_players_alive
         
         if bullet == 0:
             print(f'Player {current_player} is deceased!')
-            quit()
+            _exit(1)
         else:
             if len(list_players) == 0:
                 list_players = list_players_alive.copy()
