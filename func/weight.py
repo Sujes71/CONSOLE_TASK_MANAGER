@@ -26,14 +26,13 @@ def create_table():
                         DATE DATE NOT NULL PRIMARY KEY,
                         WEIGHT DECIMAL NOT NULL,
                         RATIO DECIMAL NOT NULL,
-                        MEAL VARCHAR(255) NOT NULL,
+                        WEEK VARCHAR(255) NOT NULL,
                         TRAINED BOOLEAN NOT NULL
                     )
                 """)
-    print('[+] new table created successfully')
-    
     conn.commit()
     conn.close()
+    print('[+] new table created successfully')
 
 def select_first_last():
         conn = create_connection(database) 
@@ -109,17 +108,16 @@ def insert_weight(weight, comidas, trained):
     tuple = [(now, weight, ratio, comidas, trained)]
     
     cur.executemany("INSERT INTO T_WEIGHTS VALUES (?,?,?,?,?)", tuple)
-    print('[+] new row inserted successfully')
-    
     conn.commit()
     conn.close()
+    print('[+] new row inserted successfully')
     
 def remove_weight(query):
     conn = create_connection(database) 
     cur = conn.cursor()
     cur.execute("DELETE FROM T_WEIGHTS WHERE " + query)
+    conn.commit()
     conn.close()
-    
     print('[-] deleted successfully')
 
 def query(query):  
@@ -153,10 +151,10 @@ def truncate_weight():
     cur = conn.cursor()
     
     cur.execute("DELETE FROM T_WEIGHTS")
-    print('[-] truncated successfully')
     
     conn.commit()
     conn.close()
+    print('[-] truncated successfully')
     
 def list_selection(query):
     list_weights = []
@@ -187,7 +185,7 @@ def list_selection(query):
             list_comidas.append(element[8])
             list_trained.append(element[9])
         print("TABLE WEIGHTS\n")
-        df = pd.DataFrame({'WEIGHT':list_weights, 'RATIO':list_ratios, 'MEAL':list_comidas, 'TRAINED':list_trained, 'DATE':list_dates})
+        df = pd.DataFrame({'WEIGHT':list_weights, 'RATIO':list_ratios, 'WEEK':list_comidas, 'TRAINED':list_trained, 'DATE':list_dates})
         index = ["CURRENT", "BEFORE"]
         df.index = index
     else:
@@ -205,7 +203,7 @@ def list_selection(query):
             _exit(1)
 
         print("TABLE WEIGHTS\n")
-        df = pd.DataFrame({'WEIGHT':list_weights, 'RATIO':list_ratios, 'MEAL':list_comidas, 'TRAINED':list_trained, 'DATE':list_dates})
+        df = pd.DataFrame({'WEIGHT':list_weights, 'RATIO':list_ratios, 'WEEK':list_comidas, 'TRAINED':list_trained, 'DATE':list_dates})
         df.index = df.index + 1
         
     print(tabulate(df, showindex=True, headers=df.columns))

@@ -1,12 +1,10 @@
 import os
 
 def createFile(filename):
-
     open(filename, 'w')
     print("[+] Generated file "+filename)
 
 def createDirectory(path, foldername):
-
     os.mkdir(path + foldername + "/")
     print("[+] Generated directory "+ foldername)
     
@@ -24,29 +22,25 @@ def generate(folder, task):
         os.chdir(path + folder)
         
     else:
-        createDirectory(path,folder)
+        createDirectory(path, folder)
         os.chdir(path + folder)
-        createFile('localhost.txt')
 
     if os.path.isdir(path + folder + task):
         print("[!] task code already exists!")
         
     else:
-            
         createDirectory(path + folder, task)
         os.chdir(path + folder + task)
-
-        createDirectory(path + folder + task, '/urls')
-
-        createFile('issue.txt')
-        createFile('updates.txt')
-        createFile('queries.txt')
-        createFile('conclusion.txt')
+        createDirectory(path + folder + task, '/attachments')
+        createFile('description.txt')
+        createFile('branches.txt')
+        createFile('report.txt')
         
 def generate_only_folders(folder):
     inPath =  f"C:/Users/{os.getlogin()}/Documents/"
     path = f"C:/Users/{os.getlogin()}/Documents/Work-index/"
     folder = "/" + folder
+    
     if not os.path.isdir(path):
         createDirectory(inPath, "Work-index")
         

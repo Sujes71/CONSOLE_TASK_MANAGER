@@ -1,18 +1,19 @@
 import sys
 from func.generator import generate, generate_only_folders
 from func.timer import ring
-from func.exec import exec, insert, list_apps, remove, create_table, truncate
+from func.exec import exec, insert, list_apps, remove, truncate
 from func.shutdown import shutdown
 from func.out  import signout, listout
 from func.scrap import list_anime, list_league
 from func.weight import insert_weight, list_selection, truncate_weight, remove_weight, query
 from func.games.rps_game import rps_game
 from func.games.russian_game import russian_game
+from func.pending_games import insert_game, truncate_games, remove_game, list_selection_games, update_game, query_game
 
-arg = [ '-h', '--help', '-g', '--generator', '-a', '--alarm', '-e', '--exec', '-s', '--shutdown', '--outsign', '-o', '-sc', '--scrap', '-w', '--weight', '-ga', '--game']
+arg = [ '-h', '--help', '-g', '--generator', '-a', '--alarm', '-e', '--exec', '-s', '--shutdown', '--outsign', '-o', '-sc', '--scrap', '-w', '--weight', '-ga', '--game', '-pg', '--pending']
 
 try:
-    error = ['argument not recognized', f'error: argument [{sys.argv[1]}]: expected one or two arguments', f'error: argument [{sys.argv[1]}]: expected one argument', f'error: argument [{sys.argv[1]}]: expected four arguments', f'error: argument [{sys.argv[1]}]: expected three arguments', f'error: argument [{sys.argv[1]}]: expected no arguments', f'error: argument [{sys.argv[1]}]: expected three or four arguments']
+    error = ['argument not recognized', f'error: argument [{sys.argv[1]}]: expected one or two arguments', f'error: argument [{sys.argv[1]}]: expected one argument', f'error: argument [{sys.argv[1]}]: expected four arguments', f'error: argument [{sys.argv[1]}]: expected three arguments', f'error: argument [{sys.argv[1]}]: expected no arguments', f'error: argument [{sys.argv[1]}]: expected three or four arguments', f'error: argument [{sys.argv[1]}]: expected two arguments']
     
 except:
     print('[!] you did not entered arguments')
@@ -36,6 +37,7 @@ def task_help():
                 -sc/--scrap = permits the user to scrapping last animes and football result
                 -w/--weight = permits the user to have a daily control of the weight and meal
                 -ga/--game permits the user to select multiple options of games
+                -pg/--pending permits the user to have a daily control of the pending games
                 """ )
     else:
         print('[!] %s ' %(error[5]))
@@ -358,6 +360,89 @@ def task_weight():
         print("""
         arg1 = -l/--list to list all available, --add to include a new one, --filter to filter data, --truncate to remove elements in t_weight \n            or --query to select, add, remove or update
         """ )
+        
+def task_peding_games():
+    if len(sys.argv) == 2:
+        print(f'usage: {sys.argv[0]} [{sys.argv[1]}]')
+        print("optional arguments:"+"""
+            -pg,  --pending permits the user to have a daily control of the game´s im playing
+            """ )
+    elif len(sys.argv) == 3:
+        if sys.argv[2] == '--list' or sys.argv[2] == '-l':
+            list_selection_games("*")
+        elif sys.argv[2] == '--add':
+            print('[!] %s ' %(error[2]))
+            print("""
+            arg1 = the name of the game
+            """ )
+        elif sys.argv[2] == '--truncate':
+            truncate_games()
+            
+        elif sys.argv[2] == '?':
+            print('[?] arg1 = -l/--list to list all available, --add to include a new one, --filter to filter data, --truncate to remove elements in t_games \n, --query or --update  '+
+            'to select, add, remove or update')
+        else:
+            print('[!] %s ' %(error[2]))
+            print("""
+            arg1 = -l/--list to list all available, --add to include a new one, --filter to filter data, --truncate to remove elements in t_games \n            , --query or --update to select, add, remove or update
+            """ )
+    elif len(sys.argv) >= 4 or len(sys.argv) <= 6:
+        if sys.argv[2] == '--filter' and len(sys.argv) == 4:
+            list_selection_games(sys.argv[3])
+                
+        elif sys.argv[2] == '--add':
+            try:
+                if sys.argv[3] == '?':
+                    print('[?] arg1 = the name of the game')
+                else:
+                    insert_game(sys.argv[3])
+            except:
+                print('[!] %s ' %(error[2]))
+                print("""
+                arg1 = the name of the game
+                """ )
+        elif sys.argv[2] == '--update':
+            try:
+                if sys.argv[3] == '?':
+                    print('[?] arg1 = the name of the game')
+                elif sys.argv[4] == '?':
+                    print('[?] arg2 = the status of the game')
+                else:
+                    update_game(sys.argv[3], sys.argv[4])
+            except:
+                print('[!] %s ' %(error[7]))
+                print("""
+                arg1 = the name of the game
+                arg2 = the status of the game
+                """ )
+        elif sys.argv[2] == '--truncate':
+            try:
+                
+                if sys.argv[3] == '?':
+                    print('[?] arg1 = the query filter to remove in db')
+                else:
+                    remove_game(sys.argv[3])
+            except:
+                print('[!] %s ' %(f'error: argument [{sys.argv[1]} {sys.argv[2]}]: expected one argument'))
+                print("""
+                arg1 = the query filter to remove in db
+                """ )
+        elif sys.argv[2] == '--query':
+            if sys.argv[3] == '?':
+                    print('[?] arg1 = valid query to select, add, remove or update values from t_games')
+            else:
+                query_game(sys.argv[3])
+        else:
+            print('[!] %s ' %(error[2]))
+            print("""
+            arg1 = -l/--list to list all available, --add to include a new one, --filter to filter data, --truncate to remove elements in t_games \n            or , --query or --update to select, add, remove or update
+            """ )
+    else:
+        print('[!] %s ' %(f'error: argument [{sys.argv[1]} {sys.argv[2]}]: expected one argument'))
+        print("""
+        arg1 = -l/--list to list all available, --add to include a new one, --filter to filter data, --truncate to remove elements in t_games \n            or , --query or --update to select, add, remove or update
+        """ )
+        
 def task_game():
     if len(sys.argv) == 2:
         print(f'usage: {sys.argv[0]} [{sys.argv[1]}]')
@@ -429,7 +514,9 @@ sys_args = {
     arg[14]:task_weight,
     arg[15]:task_weight,
     arg[16]:task_game,
-    arg[17]:task_game
+    arg[17]:task_game,
+    arg[18]:task_peding_games,
+    arg[19]:task_peding_games
 }
 
 try:
