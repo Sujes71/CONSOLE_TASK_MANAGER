@@ -1,13 +1,12 @@
 import sys
 from func.generator import generate, generate_only_folders
-from func.exec import exec, insert, list_apps, remove, truncate
 from func.scrap import list_anime, list_league
 from func.weight import insert_weight, list_selection, truncate_weight, remove_weight, query
 from func.games.rps_game import rps_game
 from func.games.russian_game import russian_game
 from func.pending_games import insert_game, truncate_games, remove_game, list_selection_games, update_game, query_game
 
-arg = [ '-h', '--help', '-g', '--generator', '-e', '--exec', '-sc', '--scrap', '-w', '--weight', '-ga', '--game', '-pg', '--pending']
+arg = [ '-h', '--help', '-g', '--generator', '-sc', '--scrap', '-w', '--weight', '-ga', '--game', '-pg', '--pending']
 
 try:
     error = ['argument not recognized', f'error: argument [{sys.argv[1]}]: expected one or two arguments', f'error: argument [{sys.argv[1]}]: expected one argument', f'error: argument [{sys.argv[1]}]: expected four arguments', f'error: argument [{sys.argv[1]}]: expected three arguments', f'error: argument [{sys.argv[1]}]: expected no arguments', f'error: argument [{sys.argv[1]}]: expected three or four arguments', f'error: argument [{sys.argv[1]}]: expected two arguments']
@@ -27,7 +26,6 @@ def task_help():
         print("""
                 -h/--help = show the avaiable arguments
                 -g/--generator = generate a folder system for projects
-                -e/--exec = execute a program or open a website and permits you check, add or remove apps from exec db
                 -sc/--scrap = permits the user to scrapping last animes and football result
                 -w/--weight = permits the user to have a daily control of the weight and meal
                 -ga/--game permits the user to select multiple options of games
@@ -64,81 +62,7 @@ def task_generator():
         arg1 = folder name
         arg2 = task code
         """ )
-        
-def task_exec():
-    if len(sys.argv) == 2:
-        print(f'usage: {sys.argv[0]} [{sys.argv[1]}]')
-        print("optional arguments:"+"""
-            -e,  --exec  execute a program or open a website and permits you check, add or remove apps from exec db
-            """ )
-    
-    elif len(sys.argv) == 3:  
-        if sys.argv[2] == '--list' or sys.argv[2] == '-l':
-            list_apps()
-        elif sys.argv[2] == '--add':
-                print('[!] %s ' %(error[4]))
-                print("""
-                arg1 = name of the program to add
-                arg2 = description of the program to add
-                arg3 = path of the program to add
-                """ )
-        elif sys.argv[2] == '--remove' or sys.argv[2] == '-r':
-                print('[!] %s ' %(error[2]))
-                print("""
-                arg1 = name of the program to remove
-                """ )
-        elif sys.argv[2] == '--truncate':
-            truncate()
-            
-        elif sys.argv[2] == '?':
-            print('[?] arg1 = name of the program or web domain, -l/--list to list all available, --add to include a new one, --remove to remove or --truncate to remove all db elements')
-        else:
-            exec(sys.argv[2])
-        
-    elif len(sys.argv) > 3 and len(sys.argv) <= 6:
-        if sys.argv[2] == '--add':
-            try:
-                if len(sys.argv) == 6 and sys.argv[5] != '?' and sys.argv[4] != '?' and sys.argv[3] != '?':
-                    insert(sys.argv[3], sys.argv[4], sys.argv[5])
-                elif sys.argv[3] == '?':
-                    print('[?] arg1 = name of the program to add')
-                elif sys.argv[4] == '?':
-                    print('[?] arg2 = description of the program to add')
-                elif sys.argv[5] == '?':
-                    print('[?] arg3 = path of the program to add')
-            except:
-                print('[!] %s ' %(f'error: argument [{sys.argv[1]} {sys.argv[2]}]: expected three arguments'))
-                print("""
-                arg1 = name of the program to add
-                arg2 = description of the program to add
-                arg3 = path of the program to add
-                """ )
-        elif sys.argv[2] == '--remove':
-            if len(sys.argv) == 4 and sys.argv[3] != '?':
-                remove(sys.argv[3])
-            elif sys.argv[3] == '?':
-                print('[?] arg1 = name of the program to remove')
-            else:
-                print('[!] %s ' %(f'error: argument [{sys.argv[1]} {sys.argv[2]}]: expected one argument'))
-                print("""
-                arg1 = name of the program to remove
-                """ )
-        elif sys.argv[2] == '--list' or sys.argv[2] == '-l':
-            print('[!] %s ' %(f'error: argument [{sys.argv[1]} {sys.argv[2]}]: expected no arguments'))
-            print("""
-            expected no arguments
-            """ )
-        else:
-            print('[!] %s ' %(error[2]))
-            print("""
-            arg1 = name of the program or web domain, -l/--list to list all available, --add to include a new one, --remove to remove or --truncate to remove all db elements'
-            """ )
-    else:
-        print('[!] %s ' %(error[2]))
-        print("""
-        arg1 = name of the program or web domain, -l/--list to list all available, --add to include a new one, --remove to remove or --truncate to remove all db elements'
-        """ )
-        
+                    
 def task_scrap():
     if len(sys.argv) == 2:
         print(f'usage: {sys.argv[0]} [{sys.argv[1]}]')
@@ -397,16 +321,14 @@ sys_args = {
     arg[1]:task_help,
     arg[2]:task_generator,
     arg[3]:task_generator,
-    arg[4]:task_exec,
-    arg[5]:task_exec,
-    arg[6]:task_scrap,
-    arg[7]:task_scrap,
-    arg[8]:task_weight,
-    arg[9]:task_weight,
-    arg[10]:task_game,
-    arg[11]:task_game,
-    arg[12]:task_peding_games,
-    arg[13]:task_peding_games
+    arg[4]:task_scrap,
+    arg[5]:task_scrap,
+    arg[6]:task_weight,
+    arg[7]:task_weight,
+    arg[8]:task_game,
+    arg[9]:task_game,
+    arg[10]:task_peding_games,
+    arg[11]:task_peding_games
 }
 
 try:
